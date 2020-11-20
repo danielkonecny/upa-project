@@ -1,0 +1,762 @@
+[
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0327"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0323"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0411"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0412"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0424"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ020C"
+  },
+  {
+    "dist1": "CZ0325",
+    "dist2": "CZ0326"
+  },
+  {
+    "dist1": "CZ0413",
+    "dist2": "CZ0412"
+  },
+  {
+    "dist1": "CZ0414",
+    "dist2": "CZ0411"
+  },
+  {
+    "dist1": "CZ0412",
+    "dist2": "CZ0411"
+  },
+  {
+    "dist1": "CZ0411",
+    "dist2": "CZ0327"
+  },
+  {
+    "dist1": "CZ0327",
+    "dist2": "CZ0321"
+  },
+  {
+    "dist1": "CZ0327",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0321",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0321",
+    "dist2": "CZ0322"
+  },
+  {
+    "dist1": "CZ0322",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0323",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0326",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ0323",
+    "dist2": "CZ0326"
+  },
+  {
+    "dist1": "CZ0412",
+    "dist2": "CZ0424"
+  },
+  {
+    "dist1": "CZ0412",
+    "dist2": "CZ0422"
+  },
+  {
+    "dist1": "CZ0422",
+    "dist2": "CZ0424"
+  },
+  {
+    "dist1": "CZ0425",
+    "dist2": "CZ0424"
+  },
+  {
+    "dist1": "CZ0425",
+    "dist2": "CZ0422"
+  },
+  {
+    "dist1": "CZ0425",
+    "dist2": "CZ0426"
+  },
+  {
+    "dist1": "CZ0424",
+    "dist2": "CZ0426"
+  },
+  {
+    "dist1": "CZ0424",
+    "dist2": "CZ0423"
+  },
+  {
+    "dist1": "CZ0426",
+    "dist2": "CZ0423"
+  },
+  {
+    "dist1": "CZ0426",
+    "dist2": "CZ0427"
+  },
+  {
+    "dist1": "CZ0427",
+    "dist2": "CZ0423"
+  },
+  {
+    "dist1": "CZ0427",
+    "dist2": "CZ0421"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ0423"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ0511"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ0207"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ0203"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ0209"
+  },
+  {
+    "dist1": "CZ0206",
+    "dist2": "CZ020A"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ020A"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0100"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0207"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0208"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0204"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0205"
+  },
+  {
+    "dist1": "CZ0209",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0202",
+    "dist2": "CZ020A"
+  },
+  {
+    "dist1": "CZ0202",
+    "dist2": "CZ0203"
+  },
+  {
+    "dist1": "CZ0202",
+    "dist2": "CZ020C"
+  },
+  {
+    "dist1": "CZ0202",
+    "dist2": "CZ0326"
+  },
+  {
+    "dist1": "CZ0202",
+    "dist2": "CZ020B"
+  },
+  {
+    "dist1": "CZ0100",
+    "dist2": "CZ020A"
+  },
+  {
+    "dist1": "CZ020A",
+    "dist2": "CZ0203"
+  },
+  {
+    "dist1": "CZ020A",
+    "dist2": "CZ020B"
+  },
+  {
+    "dist1": "CZ020A",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0424",
+    "dist2": "CZ020C"
+  },
+  {
+    "dist1": "CZ0424",
+    "dist2": "CZ0203"
+  },
+  {
+    "dist1": "CZ020C",
+    "dist2": "CZ0203"
+  },
+  {
+    "dist1": "CZ020C",
+    "dist2": "CZ0326"
+  },
+  {
+    "dist1": "CZ0203",
+    "dist2": "CZ0423"
+  },
+  {
+    "dist1": "CZ0326",
+    "dist2": "CZ020B"
+  },
+  {
+    "dist1": "CZ020B",
+    "dist2": "CZ0324"
+  },
+  {
+    "dist1": "CZ020B",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ020B",
+    "dist2": "CZ0314"
+  },
+  {
+    "dist1": "CZ020B",
+    "dist2": "CZ0317"
+  },
+  {
+    "dist1": "CZ020B",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0324",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ0322",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ0322",
+    "dist2": "CZ0315"
+  },
+  {
+    "dist1": "CZ0423",
+    "dist2": "CZ0421"
+  },
+  {
+    "dist1": "CZ0423",
+    "dist2": "CZ0511"
+  },
+  {
+    "dist1": "CZ0421",
+    "dist2": "CZ0511"
+  },
+  {
+    "dist1": "CZ0511",
+    "dist2": "CZ0513"
+  },
+  {
+    "dist1": "CZ0511",
+    "dist2": "CZ0207"
+  },
+  {
+    "dist1": "CZ0207",
+    "dist2": "CZ0513"
+  },
+  {
+    "dist1": "CZ0207",
+    "dist2": "CZ0514"
+  },
+  {
+    "dist1": "CZ0207",
+    "dist2": "CZ0522"
+  },
+  {
+    "dist1": "CZ0207",
+    "dist2": "CZ0208"
+  },
+  {
+    "dist1": "CZ0512",
+    "dist2": "CZ0513"
+  },
+  {
+    "dist1": "CZ0512",
+    "dist2": "CZ0514"
+  },
+  {
+    "dist1": "CZ0513",
+    "dist2": "CZ0514"
+  },
+  {
+    "dist1": "CZ0204",
+    "dist2": "CZ0208"
+  },
+  {
+    "dist1": "CZ0204",
+    "dist2": "CZ0521"
+  },
+  {
+    "dist1": "CZ0204",
+    "dist2": "CZ0532"
+  },
+  {
+    "dist1": "CZ0204",
+    "dist2": "CZ0205"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0312"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0315"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0314"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0317"
+  },
+  {
+    "dist1": "CZ0311",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0315",
+    "dist2": "CZ0312"
+  },
+  {
+    "dist1": "CZ0315",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ0314",
+    "dist2": "CZ0316"
+  },
+  {
+    "dist1": "CZ0314",
+    "dist2": "CZ0317"
+  },
+  {
+    "dist1": "CZ0633",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0633",
+    "dist2": "CZ0317"
+  },
+  {
+    "dist1": "CZ0633",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0633",
+    "dist2": "CZ0631"
+  },
+  {
+    "dist1": "CZ0633",
+    "dist2": "CZ0632"
+  },
+  {
+    "dist1": "CZ0317",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0317",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0205",
+    "dist2": "CZ0201"
+  },
+  {
+    "dist1": "CZ0205",
+    "dist2": "CZ0631"
+  },
+  {
+    "dist1": "CZ0205",
+    "dist2": "CZ0531"
+  },
+  {
+    "dist1": "CZ0205",
+    "dist2": "CZ0532"
+  },
+  {
+    "dist1": "CZ0201",
+    "dist2": "CZ0631"
+  },
+  {
+    "dist1": "CZ0522",
+    "dist2": "CZ0208"
+  },
+  {
+    "dist1": "CZ0522",
+    "dist2": "CZ0521"
+  },
+  {
+    "dist1": "CZ0522",
+    "dist2": "CZ0525"
+  },
+  {
+    "dist1": "CZ0522",
+    "dist2": "CZ0514"
+  },
+  {
+    "dist1": "CZ0525",
+    "dist2": "CZ0521"
+  },
+  {
+    "dist1": "CZ0525",
+    "dist2": "CZ0523"
+  },
+  {
+    "dist1": "CZ0525",
+    "dist2": "CZ0514"
+  },
+  {
+    "dist1": "CZ0521",
+    "dist2": "CZ0208"
+  },
+  {
+    "dist1": "CZ0521",
+    "dist2": "CZ0532"
+  },
+  {
+    "dist1": "CZ0521",
+    "dist2": "CZ0524"
+  },
+  {
+    "dist1": "CZ0521",
+    "dist2": "CZ0523"
+  },
+  {
+    "dist1": "CZ0634",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0634",
+    "dist2": "CZ0632"
+  },
+  {
+    "dist1": "CZ0634",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0634",
+    "dist2": "CZ0643"
+  },
+  {
+    "dist1": "CZ0634",
+    "dist2": "CZ0647"
+  },
+  {
+    "dist1": "CZ0647",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0632",
+    "dist2": "CZ0313"
+  },
+  {
+    "dist1": "CZ0632",
+    "dist2": "CZ0631"
+  },
+  {
+    "dist1": "CZ0632",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0647"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0644"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0646"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0641"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0643",
+    "dist2": "CZ0642"
+  },
+  {
+    "dist1": "CZ0647",
+    "dist2": "CZ0644"
+  },
+  {
+    "dist1": "CZ0645",
+    "dist2": "CZ0644"
+  },
+  {
+    "dist1": "CZ0645",
+    "dist2": "CZ0646"
+  },
+  {
+    "dist1": "CZ0645",
+    "dist2": "CZ0721"
+  },
+  {
+    "dist1": "CZ0645",
+    "dist2": "CZ0722"
+  },
+  {
+    "dist1": "CZ0646",
+    "dist2": "CZ0644"
+  },
+  {
+    "dist1": "CZ0646",
+    "dist2": "CZ0641"
+  },
+  {
+    "dist1": "CZ0646",
+    "dist2": "CZ0713"
+  },
+  {
+    "dist1": "CZ0646",
+    "dist2": "CZ0721"
+  },
+  {
+    "dist1": "CZ0724",
+    "dist2": "CZ0722"
+  },
+  {
+    "dist1": "CZ0724",
+    "dist2": "CZ0721"
+  },
+  {
+    "dist1": "CZ0724",
+    "dist2": "CZ0723"
+  },
+  {
+    "dist1": "CZ0722",
+    "dist2": "CZ0721"
+  },
+  {
+    "dist1": "CZ0721",
+    "dist2": "CZ0713"
+  },
+  {
+    "dist1": "CZ0721",
+    "dist2": "CZ0714"
+  },
+  {
+    "dist1": "CZ0721",
+    "dist2": "CZ0723"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0641"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0531"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0427"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0715"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0712"
+  },
+  {
+    "dist1": "CZ0533",
+    "dist2": "CZ0713"
+  },
+  {
+    "dist1": "CZ0641",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0641",
+    "dist2": "CZ0713"
+  },
+  {
+    "dist1": "CZ0531",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0531",
+    "dist2": "CZ0631"
+  },
+  {
+    "dist1": "CZ0531",
+    "dist2": "CZ0532"
+  },
+  {
+    "dist1": "CZ0531",
+    "dist2": "CZ0427"
+  },
+  {
+    "dist1": "CZ0631",
+    "dist2": "CZ0635"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0713"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0714"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0804"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0805"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0801"
+  },
+  {
+    "dist1": "CZ0712",
+    "dist2": "CZ0715"
+  },
+  {
+    "dist1": "CZ0713",
+    "dist2": "CZ0714"
+  },
+  {
+    "dist1": "CZ0714",
+    "dist2": "CZ0804"
+  },
+  {
+    "dist1": "CZ0804",
+    "dist2": "CZ0805"
+  },
+  {
+    "dist1": "CZ0805",
+    "dist2": "CZ0801"
+  },
+  {
+    "dist1": "CZ0801",
+    "dist2": "CZ0715"
+  },
+  {
+    "dist1": "CZ0715",
+    "dist2": "CZ0534"
+  },
+  {
+    "dist1": "CZ0715",
+    "dist2": "CZ0711"
+  },
+  {
+    "dist1": "CZ0534",
+    "dist2": "CZ0532"
+  },
+  {
+    "dist1": "CZ0534",
+    "dist2": "CZ0524"
+  },
+  {
+    "dist1": "CZ0532",
+    "dist2": "CZ0524"
+  },
+  {
+    "dist1": "CZ0524",
+    "dist2": "CZ0523"
+  },
+  {
+    "dist1": "CZ0711",
+    "dist2": "CZ0715"
+  },
+  {
+    "dist1": "CZ0711",
+    "dist2": "CZ0801"
+  },
+  {
+    "dist1": "CZ0802",
+    "dist2": "CZ0723"
+  },
+  {
+    "dist1": "CZ0802",
+    "dist2": "CZ0804"
+  },
+  {
+    "dist1": "CZ0802",
+    "dist2": "CZ0803"
+  },
+  {
+    "dist1": "CZ0802",
+    "dist2": "CZ0806"
+  },
+  {
+    "dist1": "CZ0723",
+    "dist2": "CZ0804"
+  },
+  {
+    "dist1": "CZ0803",
+    "dist2": "CZ0806"
+  },
+  {
+    "dist1": "CZ0806",
+    "dist2": "CZ0805"
+  },
+  {
+    "dist1": "CZ0806",
+    "dist2": "CZ0804"
+  },
+  {
+    "dist1": "CZ0723",
+    "dist2": "CZ0714"
+  }
+]
