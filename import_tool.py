@@ -2,10 +2,12 @@ import json
 import datetime
 from neo4j import GraphDatabase
 
-with open('CiselnikOkresu.json', encoding="utf8") as json_file:
+PASS_TO_DATABASE = 'admin'
+
+with open('districts_names_codes.json', encoding="utf8") as json_file:
     Districts = json.load(json_file)
 
-with open('OkresyAVztahy.json', encoding="utf8") as json_file:
+with open('districts_negborows_relations.json', encoding="utf8") as json_file:
     DistrictsRelations = json.load(json_file)
 
 with open('data.json', encoding="utf8") as json_file:
@@ -13,7 +15,7 @@ with open('data.json', encoding="utf8") as json_file:
     # print(CoronaData)
 
 uri = "neo4j://localhost:7687"
-driver = GraphDatabase.driver(uri, auth=("neo4j", "admin"))
+driver = GraphDatabase.driver(uri, auth=("neo4j", PASS_TO_DATABASE))
 
 
 def generate_districts(tx, iname, icode, idate, iincInf, iincDead, iincCured):
@@ -31,9 +33,6 @@ def generate_relations_between_districts(tx, dist_1_code, dist_2_code):
 
 
 def generate_relations_between_dates_in_district(tx, dist_1_code, date1, date2):
-    print("MATCH (a:District), (b:District) "
-        "WHERE a.code = \'", dist_1_code, "\' AND a.date = \'", date1, "\' AND b.code = \'", dist_1_code, "\' AND b.date = \'", date2, "\' "
-        "CREATE (a)-[:NEXT_DAY]->(b)")
     tx.run(
         "MATCH (a:District), (b:District) "
         "WHERE a.code = $dist AND a.date = $date_1 AND b.code = $dist AND b.date = $date_2 "
