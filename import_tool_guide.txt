@@ -1,8 +1,7 @@
-I. install needed sw
+I. install required sw
 	Neo4j - https://neo4j.com/download-v2/
-	python libraries
+	python libraries (requires neo4j, json /built-in/, datetime /built-in/)
 		neo4j - pip install neo4j
-
 
 IIa. create new database 
 	it can be done in Neo4j Desktop app
@@ -13,25 +12,26 @@ IIb. clear existing database
 	MATCH (p) DETACH DELETE p 
 
 III. run the python script 'import_tool.py'
-	it will import the data from coronavirus data in json (data.json)
+	this script will import the data from coronavirus data in json (data.json)
 	this json does not include names of districts so the names and codes are in separe file (districts_names_codes.json)
-	negborows - the relations between districs are in another file (districts_negborows_relations.json)
-	then the script will extract all dates and add relations between all dates for the same discrtrits
+	negborows - the relations between districs - are in another file (districts_negborows_relations.json)
+	in the end the script will query all dates and add relations between all dates for the same discrtrits
 
 IV. database is ready
 	if you want to import data again you need to clear the database before with command from step IIb.
-	some query examples:
-		graph of districs in one day '2020-09-09'
-			MATCH (a:District) WHERE a.date='2020-09-09' RETURN a
 
-		graph of districs in two days '2020-09-09' and '2020-09-10'
-			MATCH (a:District), (b:District) WHERE a.date='2020-09-10' AND b.date='2020-09-09' RETURN a,b
+some query examples:
+	graph of districs in one day '2020-09-09'
+		MATCH (a:District) WHERE a.date='2020-09-09' RETURN a
 
-		graph of all dates for one district 'Brno-město'
-			MATCH (a:District) WHERE a.name='Brno-město' RETURN a
+	graph of districs in two days '2020-09-09' and '2020-09-10'
+		MATCH (a:District), (b:District) WHERE a.date='2020-09-10' AND b.date='2020-09-09' RETURN a,b
 
-		graph of range of days from '2020-09-01' to '2020-09-30' for one district 'Znojmo'
-			MATCH (a:District) WHERE a.name='Znojmo' AND a.date >= '2020-09-01' AND a.date <= '2020-09-30' RETURN a
+	graph of all dates for one district 'Brno-město'
+		MATCH (a:District) WHERE a.name='Brno-město' RETURN a
 
-		graph for only increase of infected people in district 'Brno-venkov' for all dates
-			MATCH (a:District) WHERE a.name='Brno-venkov' RETURN a.date, a.incInf
+	graph of range of days from '2020-09-01' to '2020-09-30' for one district 'Znojmo'
+		MATCH (a:District) WHERE a.name='Znojmo' AND a.date >= '2020-09-01' AND a.date <= '2020-09-30' RETURN a
+
+	table of date and daily increase number of infected people in district 'Brno-venkov' for all dates
+		MATCH (a:District) WHERE a.name='Brno-venkov' RETURN a.date, a.incInf
