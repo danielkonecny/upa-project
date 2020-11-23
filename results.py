@@ -23,7 +23,7 @@ def select_abs(conn, from_date='0000-00-00', to_date='9999-99-99'):
 
 def select_per(conn, from_date='0000-00-00', to_date='9999-99-99'):
     cur = conn.cursor()
-    cur.execute(f"SELECT idate, SUM(infecPer) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
+    cur.execute(f"SELECT idate, AVG(infecPer) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
     return cur.fetchall()
 
 
@@ -36,7 +36,7 @@ def select_ma(conn, iperiod=7, from_date='0000-00-00', to_date='9999-99-99'):
 conn = create_connection(database)
 
 with conn:
-    from_date = '2020-10-01'
+    from_date = '2020-06-09'
     to_date = '3020-03-29'
     iperiod = 7
 
@@ -57,14 +57,25 @@ with conn:
     dates_avg = avg[0]
     infec_avg = list(map(float, avg[1]))
 
-    plt.bar(dates_abs, infec_abs, color="grey", width=0.5)
-    plt.plot(dates_avg, infec_avg, color="purple")
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
+
+    ax1.bar(dates_abs, infec_abs, color="grey", width=0.65)
+    ax1.plot(dates_avg, infec_avg, color="purple")
     if len(dates_abs) > 15:
         step = int(len(dates_abs) / 15)
     else:
         step = 1
-    plt.xticks(dates_abs[::step], rotation=90)
-    plt.xlabel('Dates')
+
+    ax2.set_xticks(range(0, len(dates_abs))[::step])
+    plt.setp(ax1.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+    ax2.margins(4)
+    ax2.plot(dates_per, infec_per, color="red")
+
+    ax1.set_ylabel("Number of infected")
+    ax2.set_ylabel("Percentage increase")
+    ax1.set_xlabel("Dates")
+
+    fig.tight_layout()
     plt.show()
-
-
