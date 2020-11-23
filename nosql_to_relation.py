@@ -30,25 +30,27 @@ def create_database(database_conn):
     id integer PRIMARY KEY,
     distCode text NOT NULL,
     distName text NOT NULL,
-    date text NOT NULL,
-    infec integer NOT NULL,
-    incInfecPer float NOT NULL);'''
+    idate date NOT NULL,
+    iperiod integer NOT NULL,
+    incInfecAvg float NOT NULL,
+    incInfecAvgPer float NOT NULL);'''
 
     create_table(database_conn, dist_infec_table)
 
 
 def insert_dist_infec(insert_conn, insert_dist_infec_data):
-    sql = 'INSERT INTO distInfec(distCode, distName, date, infec, incInfec) VALUES(?, ?, ?, ?, ?)'
+    sql = '''INSERT INTO distInfec(distCode, distName, idate, iperiod, incInfecAvg, incInfecAvgPer)
+    VALUES(?, ?, ?, ?, ?, ?)'''
     cur = conn.cursor()
     cur.execute(sql, insert_dist_infec_data)
     insert_conn.commit()
     return cur.lastrowid
 
 
-def get_dist_infec(tx, dist_name, date):
-    nodes = tx.run("MATCH (a:District) WHERE a.name=$name AND a.date=$date RETURN a AS distInfec",
-                   name=dist_name, date=date)
-    return [record for record in nodes.data()][0]['distInfec']
+def get_dist_infec(tx, dist_name, date, period):
+    nodes = tx.run(f"""MATCH (:District {{name: $name, date: $date}})<-[:NEXT_DAY*0..{period-1}]-(a:District) 
+                   RETURN AVG(a.incInfec) AS incInfecAvg, a.code AS code""", name=dist_name, date=date)
+    return [record for record in nodes.data()][0]
 
 
 conn = create_connection(database)
@@ -57,18 +59,18 @@ with conn:
     create_database(conn)
 
     driver = GraphDatabase.driver(uri, auth=("neo4j", PASS_TO_DATABASE))
+
     with driver.session() as session:
-        dist_infec_dat = session.read_transaction(get_dist_infec, 'Znojmo', '2020-09-09')
+        name = 'Znojmo'
+        date = '2020-09-09'
+        period = 7
+        dist_infec = session.read_transaction(get_dist_infec, name, date, period)
 
-        code = dist_infec_dat.get('code')
-        name = dist_infec_dat.get('name')
-        date = dist_infec_dat.get('date')
-        inc_infec = dist_infec_dat.get('incInfec')
+        code = dist_infec['code']
+        inc_infec_avg = dist_infec['incInfecAvg']
+        inc_infec_avg_per = 0.0
 
-        print(f"{code} - {type(code)}")
-        print(f"{name} - {type(name)}")
-        print(f"{date} - {type(date)}")
-        print(f"{inc_infec} - {type(inc_infec)}")
+        print(f"{inc_infec_avg} - {type(inc_infec_avg)}")
 
-        dist_infec_data = (code, name, date, inc_infec, inc_infec)
+        dist_infec_data = (code, name, date, period, inc_infec_avg, inc_infec_avg_per)
         dist_infec_data_id = insert_dist_infec(conn, dist_infec_data)
