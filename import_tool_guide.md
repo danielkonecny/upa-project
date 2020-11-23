@@ -33,3 +33,4 @@ Guide for Neo4j database with COVID-19 data.
 * graph of all dates for Brno-město district - `MATCH (a:District) WHERE a.name='Brno-město' RETURN a`
 * graph of range of days (1st - 30th Sep 2020) for Znojmo district - `MATCH (a:District) WHERE a.name='Znojmo' AND a.date >= '2020-09-01' AND a.date <= '2020-09-30' RETURN a`
 * table of date and daily increase number of infected people in district 'Brno-venkov' for all dates - `MATCH (a:District) WHERE a.name='Brno-venkov' RETURN a.date, a.incInfec`
+* all neighbors of Příbram district - `MATCH (a:District)-[r:IS_NEIGHBOUR]-(b:District) WHERE a.name="Příbram" AND a.date="2020-09-09"  RETURN b`
