@@ -72,8 +72,14 @@ def get_dates_of_dist(tx):
 
 def get_infec(tx, date):
     nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District) WHERE (b.incInfec > 0)
-    RETURN ((toFloat(a.incInfec) / b.incInfec)-1) AS infecPer, (a.incInfec - b.incInfec) AS infecAbs,
-    a.code AS code, a.name AS name""", date=date)
+    RETURN 
+        (((toFloat(a.incInfec) - toFloat(b.incInfec)) - 
+        (toFloat(a.incCured) - toFloat(b.incCured)) - 
+        (toFloat(a.incDead) - toFloat(b.incDead))) / 
+        (toFloat(a.incInfec) - toFloat(a.incCured) - toFloat(a.incDead)))
+    AS infecPer, (a.incInfec - b.incInfec) 
+    AS infecAbs, a.code AS code, 
+    a.name AS name""", date=date)
     return [record for record in nodes.data()]
 
 
@@ -91,25 +97,33 @@ with conn:
     driver = GraphDatabase.driver(uri, auth=("neo4j", PASS_TO_DATABASE))
 
     with driver.session() as session:
-        periods = [3, 7, 14, 28]
         dates = session.read_transaction(get_dates_of_dist)
         for date_arr in dates:
             date = date_arr[0]
-
             districts = session.read_transaction(get_infec, date)
             for district in districts:
-                name = district['name']
-                code = district['code']
-                infec_abs = district['infecAbs']
                 infec_per = district['infecPer']
-                inc_infec = (code, name, date, infec_abs, infec_per)
-                insert_infec_inc(conn, inc_infec)
-
-            for period in periods:
-                district_incs = session.read_transaction(get_dist_infec, date, period)
-                for district_inc in district_incs:
-                    name = district_inc['name']
-                    code = district_inc['code']
-                    inc_infec_avg = district_inc['incInfecAvg']
-                    dist_infec_data = (code, name, date, period, inc_infec_avg)
-                    insert_infec_ma(conn, dist_infec_data)
+                if infec_per < -0.7:
+                    print(infec_per)
+        # periods = [3, 7, 14, 28]
+        # dates = session.read_transaction(get_dates_of_dist)
+        # for date_arr in dates:
+        #     date = date_arr[0]
+        #
+        #     districts = session.read_transaction(get_infec, date)
+        #     for district in districts:
+        #         name = district['name']
+        #         code = district['code']
+        #         infec_abs = district['infecAbs']
+        #         infec_per = district['infecPer']
+        #         inc_infec = (code, name, date, infec_abs, infec_per)
+        #         insert_infec_inc(conn, inc_infec)
+        #
+        #     for period in periods:
+        #         district_incs = session.read_transaction(get_dist_infec, date, period)
+        #         for district_inc in district_incs:
+        #             name = district_inc['name']
+        #             code = district_inc['code']
+        #             inc_infec_avg = district_inc['incInfecAvg']
+        #             dist_infec_data = (code, name, date, period, inc_infec_avg)
+        #             insert_infec_ma(conn, dist_infec_data)
