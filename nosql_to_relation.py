@@ -78,7 +78,9 @@ def match_dates_of_dist(tx):
 
 
 def match_inc_infec_abs_per(tx, m_date):
-    nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District) WHERE (b.cumInfec > 0) RETURN
+    nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District)
+    WHERE ((toFloat(b.cumInfec) - toFloat(b.cumCured) - toFloat(b.cumDead)) > 0)
+    RETURN
     (toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
     toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) AS incInfecAbs,
     ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
@@ -90,7 +92,8 @@ def match_inc_infec_abs_per(tx, m_date):
 
 
 def match_inc_infec_mov_avg(tx, m_date, m_period):
-    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District) RETURN
+    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District)
+    RETURN
     ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
     toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) / {m_period}.0) AS incInfecMovAvg,
     a.code AS code,
@@ -99,7 +102,8 @@ def match_inc_infec_mov_avg(tx, m_date, m_period):
 
 
 def match_daily_outbreaks(tx, m_date, m_period):
-    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District) RETURN
+    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District)
+    RETURN
     ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
     toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) / {m_period}.0 AS incInfecMovAvg,
     a.code AS code,
