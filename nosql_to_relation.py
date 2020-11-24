@@ -73,10 +73,8 @@ def get_dates_of_dist(tx):
 def get_infec(tx, date):
     nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District) WHERE (b.incInfec > 0)
     RETURN 
-        (((toFloat(a.incInfec) - toFloat(b.incInfec)) - 
-        (toFloat(a.incCured) - toFloat(b.incCured)) - 
-        (toFloat(a.incDead) - toFloat(b.incDead))) / 
-        (toFloat(a.incInfec) - toFloat(a.incCured) - toFloat(a.incDead)))
+        ( ( toFloat(a.incInfec) - toFloat(a.incCured) - toFloat(a.incDead) - toFloat(b.incInfec) 
+        + toFloat(b.incCured) + toFloat(b.incDead) ) / ( toFloat(b.incInfec) - toFloat(b.incCured) - toFloat(b.incDead) ) )
     AS infecPer, (a.incInfec - b.incInfec) 
     AS infecAbs, a.code AS code, 
     a.name AS name""", date=date)
