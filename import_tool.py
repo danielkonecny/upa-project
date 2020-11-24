@@ -6,10 +6,10 @@ uri = "neo4j://localhost:7687"
 PASS_TO_DATABASE = 'admin'
 
 
-def generate_districts(tx, iname, icode, idate, icumInfec, icumDead, icumCured):
+def generate_districts(tx, i_name, i_code, i_date, i_cum_infec, i_cum_dead, i_cum_cured):
     tx.run("CREATE (:District {name: $name, code: $code, date: $date, "
            "cumInfec: $cumInfec, cumDead: $cumDead, cumCured: $cumCured})",
-           name=iname, code=icode, date=idate, cumInfec=icumInfec, cumDead=icumDead, cumCured=icumCured)
+           name=i_name, code=i_code, date=i_date, cumInfec=i_cum_infec, cumDead=i_cum_dead, cumCured=i_cum_cured)
 
 
 def generate_relations_between_districts(tx, dist_1_code, dist_2_code):
@@ -44,14 +44,13 @@ with open('districts_neighbors_relations.json', encoding="utf8") as json_file:
 
 with open('data.json', encoding="utf8") as json_file:
     CoronaData = json.load(json_file)
-    # print(CoronaData)
 
 driver = GraphDatabase.driver(uri, auth=("neo4j", PASS_TO_DATABASE))
 
 with driver.session() as session:
     for data in CoronaData['data']:
         code = data['okres_lau_kod']
-        name = 'null'
+        name = None
         for district in Districts:
             if district['code'] == code:
                 name = district['name']
@@ -70,6 +69,7 @@ with driver.session() as session:
     all_dates = session.read_transaction(get_all_dates)
     all_dates = sorted(all_dates, key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
     for district in Districts:
+        # noinspection PyRedeclaration
         previous_date = -1
         for date in all_dates:
             if previous_date != -1:
