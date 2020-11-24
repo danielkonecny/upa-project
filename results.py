@@ -87,7 +87,8 @@ with conn:
     ax2.set_xticks(range(0, len(dates_abs))[::step])
     plt.setp(ax1.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-    ax2.margins(4)
+    # ax2.margins(10)
+    ax2.set_ymargin(0.25)
     ax2.plot(dates_per, data_per, color="red", LineWidth=0.7)
 
     ax1.set_ylabel("Number of infected")
