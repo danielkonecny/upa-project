@@ -42,7 +42,7 @@ with open('districts_names_codes.json', encoding="utf8") as json_file:
 with open('districts_neighbors_relations.json', encoding="utf8") as json_file:
     DistrictsRelations = json.load(json_file)
 
-with open('data_testing_2.json', encoding="utf8") as json_file:
+with open('data.json', encoding="utf8") as json_file:
     CoronaData = json.load(json_file)
     # print(CoronaData)
 
