@@ -18,49 +18,56 @@ def create_connection(db_file=':memory:'):
 conn = create_connection(database)
 
 
-def select_inc_infec_abs(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', district = all):
+def select_inc_infec_abs(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', s_district='all'):
     cur = s_conn.cursor()
-    if district == 'all':
+    if s_district == 'all':
         cur.execute(f"""SELECT date, SUM(incInfecAbs) FROM incInfecAbsPer
         WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' GROUP BY date""")
     else:
         cur.execute(f"""SELECT date, SUM(incInfecAbs) FROM incInfecAbsPer
-        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND distName = '{district}' 
+        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND distName = '{s_district}' 
         GROUP BY date""")
     return cur.fetchall()
 
 
-def select_inc_infec_per(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', district = all):
+def select_inc_infec_per(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', s_district='all'):
     cur = s_conn.cursor()
-    if district == 'all':
+    if s_district == 'all':
         cur.execute(f"""SELECT date, AVG(incInfecPer) FROM incInfecAbsPer
         WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' GROUP BY date""")
     else:
         cur.execute(f"""SELECT date, AVG(incInfecPer) FROM incInfecAbsPer
-        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND distName = '{district}'  
+        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND distName = '{s_district}'  
         GROUP BY date""")
     return cur.fetchall()
 
 
-def select_inc_infec_mov_avg(s_conn, s_period=7, s_from_date='0000-00-00', s_to_date='9999-99-99', district = all):
+def select_inc_infec_mov_avg(s_conn, s_period=7, s_from_date='0000-00-00', s_to_date='9999-99-99', s_district='all'):
     cur = s_conn.cursor()
-    if district == 'all':
+    if s_district == 'all':
         cur.execute(f"""SELECT date, SUM(incInfecMovAvg) FROM incInfecMovAvg
         WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND period = {s_period} GROUP BY date""")
     else:
         cur.execute(f"""SELECT date, SUM(incInfecMovAvg) FROM incInfecMovAvg 
-        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND period = {s_period} AND distName = '{district}' 
+        WHERE date BETWEEN '{s_from_date}' AND '{s_to_date}' AND period = {s_period} AND distName = '{s_district}' 
         GROUP BY date""")
     return cur.fetchall()
 
 
 def plot_incerase_percentage():
     global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
+
+    plt.rcParams.update({'font.size': 6})
+
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
-    ax2.axhline(y=0, color='pink')
-    ax1.bar(dates_abs, data_abs, color="grey", width=0.65)
-    ax1.plot(dates_mov_avg, data_mov_avg, color="purple")
+    # change of infected
+    change_line = ax1.bar(dates_abs, data_abs, color="grey", width=0.65)
+    # moving average
+    average_line, = ax1.plot(dates_mov_avg, data_mov_avg, color="#A346A3", LineWidth=0.6)
+
+    # zero line for change of infecter
+    ax1.axhline(y=0, color='black', LineWidth=0.3)
 
     step = 1
     if len(dates_abs) > 13:
@@ -69,35 +76,39 @@ def plot_incerase_percentage():
     ax2.set_xticks(range(0, len(dates_abs))[::step])
     plt.setp(ax1.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-    ax2.set_ymargin(0.25)
-    ax2.plot(dates_per, data_per, color="red", LineWidth=0.7)
+    # zero line for percentage
+    ax2.axhline(y=0, color='#FFA5C5', LineWidth=0.3)
 
-    ax1.set_ylabel("Change in the number of infected")
-    ax2.set_ylabel("Percentage increase of infected")
+    # percentage change
+    percentage_line, = ax2.plot(dates_per, data_per, color="red", LineWidth=0.5)
+    ax2.set_ymargin(0.25)
+
+    ax1.set_ylabel("Change in the number of infected ")
+    ax2.set_ylabel("Percentage change of infected")
     ax1.set_xlabel("Date")
+    ax1.legend([change_line, average_line], [f"""{period}-day step moving average""", 'change of infected'], loc='upper left')
+    ax2.legend([percentage_line], ['percentage infected change'], loc='upper right')
 
     fig.tight_layout()
     if district == 'all':
-        plt.title("Graph of increase/decrease of infected in Czech")
+        plt.title("Increase/decrease of infected in Czech")
     else:
-        str = "Graph of increase/decrease of infected in "
-        str += district
-        plt.title(str)
+        plt.title(f"""Increase/decrease of infected in {district}""")
 
-    plt.savefig(f"""images/'{district}-'{from_date}'-'{to_date}''.svg')
-    plt.show()""")
+    plt.savefig(f"""images/{district}_{from_date}_{to_date}_{period}.svg""", bbox_inches='tight')
+    plt.show()
 
 
 def calculate_data_for_graph():
     global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
 
-    inc_infec_abs = select_inc_infec_abs(conn, from_date, to_date)
+    inc_infec_abs = select_inc_infec_abs(conn, from_date, to_date, district)
     print(inc_infec_abs)
     inc_infec_abs = np.swapaxes(np.array(inc_infec_abs), 0, 1)
     dates_abs = inc_infec_abs[0]
     data_abs = list(map(int, inc_infec_abs[1]))
 
-    inc_infec_per = select_inc_infec_per(conn, from_date, to_date)
+    inc_infec_per = select_inc_infec_per(conn, from_date, to_date, district)
     print(inc_infec_per)
     inc_infec_per = np.swapaxes(np.array(inc_infec_per), 0, 1)
     dates_per = inc_infec_per[0]
@@ -111,7 +122,7 @@ def calculate_data_for_graph():
             data_per.append(0.0)
     print(data_per)
 
-    inc_infec_mov_avg = select_inc_infec_mov_avg(conn, period, from_date, to_date)
+    inc_infec_mov_avg = select_inc_infec_mov_avg(conn, period, from_date, to_date, district)
     inc_infec_mov_avg = np.swapaxes(np.array(inc_infec_mov_avg), 0, 1)
     dates_mov_avg = inc_infec_mov_avg[0]
     # data_mov_avg = list(map(float, inc_infec_mov_avg[1]))
@@ -124,26 +135,29 @@ def calculate_data_for_graph():
 
 
 with conn:
-    from_date = '1020-06-09'
-    to_date = '3020-03-29'
-    period = 7
+    global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
+    from_date = '2019-03-01'
+    to_date = '2021-04-11'
+    period = 14  # periods = [3, 7, 14, 28]
     district = "all"
 
     calculate_data_for_graph()
     plot_incerase_percentage()
 
-    from_date = '1020-06-09'
-    to_date = '2020-03-29'
-    period = 3
+    from_date = '2020-04-01'
+    to_date = '2020-08-30'
+    period = 7
     district = "Brno-město"
 
     calculate_data_for_graph()
     plot_incerase_percentage()
 
-    from_date = '1020-06-09'
-    to_date = '2020-05-29'
-    period = 3
     district = "Znojmo"
+
+    calculate_data_for_graph()
+    plot_incerase_percentage()
+
+    district = "Brno-venkov"
 
     calculate_data_for_graph()
     plot_incerase_percentage()
