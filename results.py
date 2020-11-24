@@ -17,19 +17,22 @@ def create_connection(db_file=':memory:'):
 
 def select_abs(conn, from_date='0000-00-00', to_date='9999-99-99'):
     cur = conn.cursor()
-    cur.execute(f"SELECT idate, SUM(infecAbs) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
+    cur.execute(
+        f"SELECT idate, SUM(infecAbs) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
     return cur.fetchall()
 
 
 def select_per(conn, from_date='0000-00-00', to_date='9999-99-99'):
     cur = conn.cursor()
-    cur.execute(f"SELECT idate, AVG(infecPer) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
+    cur.execute(
+        f"SELECT idate, AVG(infecPer) FROM infec WHERE idate BETWEEN '{from_date}' AND '{to_date}' GROUP BY idate")
     return cur.fetchall()
 
 
 def select_ma(conn, iperiod=7, from_date='0000-00-00', to_date='9999-99-99'):
     cur = conn.cursor()
-    cur.execute(f"SELECT idate, SUM(incInfecAvg) FROM infecIncMA WHERE idate BETWEEN '{from_date}' AND '{to_date}' AND iperiod = {iperiod} GROUP BY idate")
+    cur.execute(
+        f"SELECT idate, SUM(incInfecAvg) FROM infecIncMA WHERE idate BETWEEN '{from_date}' AND '{to_date}' AND iperiod = {iperiod} GROUP BY idate")
     return cur.fetchall()
 
 
@@ -50,15 +53,30 @@ with conn:
     print(per)
     per = np.swapaxes(np.array(per), 0, 1)
     dates_per = per[0]
-    infec_per = list(map(float, per[1]))
+
+    # infec_per = list(map(float, per[1]))
+    infec_per = []
+    for item in per[1]:
+        if item is not None:
+            infec_per.append(float(item))
+        else:
+            infec_per.append(None)
+    print(infec_per)
 
     avg = select_ma(conn, iperiod, from_date, to_date)
     avg = np.swapaxes(np.array(avg), 0, 1)
     dates_avg = avg[0]
-    infec_avg = list(map(float, avg[1]))
+    # infec_avg = list(map(float, avg[1]))
+    infec_avg = []
+    for item in avg[1]:
+        if item is not None:
+            infec_avg.append(float(item))
+        else:
+            infec_avg.append(None)
 
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
+    ax2.axhline(y=0, color='pink')
 
     ax1.bar(dates_abs, infec_abs, color="grey", width=0.65)
     ax1.plot(dates_avg, infec_avg, color="purple")
@@ -71,7 +89,7 @@ with conn:
     plt.setp(ax1.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
     ax2.margins(4)
-    ax2.plot(dates_per, infec_per, color="red")
+    ax2.plot(dates_per, infec_per, color="red", LineWidth=0.7)
 
     ax1.set_ylabel("Number of infected")
     ax2.set_ylabel("Percentage increase")

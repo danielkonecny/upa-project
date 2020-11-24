@@ -6,10 +6,10 @@ uri = "neo4j://localhost:7687"
 PASS_TO_DATABASE = 'admin'
 
 
-def generate_districts(tx, iname, icode, idate, iincInfec, iincDead, iincCured):
+def generate_districts(tx, iname, icode, idate, icumInfec, icumDead, icumCured):
     tx.run("CREATE (:District {name: $name, code: $code, date: $date, "
-           "incInfec: $incInfec, incDead: $incDead, incCured: $incCured})",
-           name=iname, code=icode, date=idate, incInfec=iincInfec, incDead=iincDead, incCured=iincCured)
+           "cumInfec: $cumInfec, cumDead: $cumDead, cumCured: $cumCured})",
+           name=iname, code=icode, date=idate, cumInfec=icumInfec, cumDead=icumDead, cumCured=icumCured)
 
 
 def generate_relations_between_districts(tx, dist_1_code, dist_2_code):
@@ -56,10 +56,10 @@ with driver.session() as session:
             if district['code'] == code:
                 name = district['name']
         date = data['datum']
-        incInf = data['kumulativni_pocet_nakazenych']
-        incDead = data['kumulativni_pocet_vylecenych']
-        incCured = data['kumulativni_pocet_vylecenych']
-        session.write_transaction(generate_districts, name, code, date, incInf, incDead, incCured)
+        cumInfec = data['kumulativni_pocet_nakazenych']
+        cumDead = data['kumulativni_pocet_umrti']
+        cumCured = data['kumulativni_pocet_vylecenych']
+        session.write_transaction(generate_districts, name, code, date, cumInfec, cumDead, cumCured)
 
     for relation in DistrictsRelations:
         dist1 = relation['dist1']
