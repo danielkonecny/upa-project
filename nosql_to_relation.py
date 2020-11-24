@@ -42,8 +42,15 @@ def create_database(database_conn):
     iperiod integer NOT NULL,
     incInfecAvg float NOT NULL);'''
 
+    daily_outbreaks_table = '''CREATE TABLE IF NOT EXISTS dailyOutbreaks (
+        id integer PRIMARY KEY,
+        distCode text NOT NULL,
+        distName text NOT NULL,
+        idate date NOT NULL);'''
+
     create_table(database_conn, infec_inc_table)
     create_table(database_conn, infec_ma_table)
+    create_table(database_conn, daily_outbreaks_table)
 
 
 def insert_infec_inc(insert_conn, insert_infec_data):
@@ -85,6 +92,11 @@ def get_infec(tx, date):
 def get_dist_infec(tx, date, period):
     nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{period}]-(b:District) 
     RETURN (a.cumInfec - b.cumInfec)/{period}.0 AS incInfecAvg, a.code AS code, a.name AS name""", date=date)
+    return [record for record in nodes.data()]
+
+def get_daily_outbreaks(tx):
+    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{period}]-(b:District) 
+    RETURN (a.incInfec - b.incInfec)/{period}.0 AS incInfecAvg, a.code AS code, a.name AS name""", date=date)
     return [record for record in nodes.data()]
 
 
