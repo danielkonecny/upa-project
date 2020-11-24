@@ -26,77 +26,84 @@ def create_table(create_conn, create_table_sql):
 
 
 def create_database(database_conn):
-    infec_inc_table = '''CREATE TABLE IF NOT EXISTS infec (
+    inc_infec_abs_per_table = '''CREATE TABLE IF NOT EXISTS incInfecAbsPer (
     id integer PRIMARY KEY,
     distCode text NOT NULL,
     distName text NOT NULL,
-    idate date NOT NULL,
-    infecAbs integer NOT NULL,
-    infecPer float);'''
+    date date NOT NULL,
+    incInfecAbs integer NOT NULL,
+    incInfecPer float);'''
 
-    infec_ma_table = '''CREATE TABLE IF NOT EXISTS infecIncMA (
+    inc_infec_mov_avg_table = '''CREATE TABLE IF NOT EXISTS incInfecMovAvg (
     id integer PRIMARY KEY,
     distCode text NOT NULL,
     distName text NOT NULL,
-    idate date NOT NULL,
-    iperiod integer NOT NULL,
-    incInfecAvg float NOT NULL);'''
+    date date NOT NULL,
+    period integer NOT NULL,
+    incInfecMovAvg float NOT NULL);'''
 
     daily_outbreaks_table = '''CREATE TABLE IF NOT EXISTS dailyOutbreaks (
-        id integer PRIMARY KEY,
-        distCode text NOT NULL,
-        distName text NOT NULL,
-        idate date NOT NULL);'''
+    id integer PRIMARY KEY,
+    distCode text NOT NULL,
+    distName text NOT NULL,
+    date date NOT NULL);'''
 
-    create_table(database_conn, infec_inc_table)
-    create_table(database_conn, infec_ma_table)
+    create_table(database_conn, inc_infec_abs_per_table)
+    create_table(database_conn, inc_infec_mov_avg_table)
     create_table(database_conn, daily_outbreaks_table)
 
 
-def insert_infec_inc(insert_conn, insert_infec_data):
-    sql = 'INSERT INTO infec(distCode, distName, idate, infecAbs, infecPer) VALUES(?, ?, ?, ?, ?)'
+def insert_inc_infec_abs_per(insert_conn, inc_infec_abs_per_data):
+    sql = 'INSERT INTO incInfecAbsPer(distCode, distName, date, incInfecAbs, incInfecPer) VALUES(?, ?, ?, ?, ?)'
     cur = conn.cursor()
-    cur.execute(sql, insert_infec_data)
+    cur.execute(sql, inc_infec_abs_per_data)
     insert_conn.commit()
     return cur.lastrowid
 
 
-def insert_infec_ma(insert_conn, insert_infec_data):
-    sql = 'INSERT INTO infecIncMA(distCode, distName, idate, iperiod, incInfecAvg) VALUES(?, ?, ?, ?, ?)'
+def insert_inc_infec_mov_avg(insert_conn, inc_infec_mov_avg_data):
+    sql = 'INSERT INTO incInfecMovAvg(distCode, distName, date, period, incInfecMovAvg) VALUES(?, ?, ?, ?, ?)'
     cur = conn.cursor()
-    cur.execute(sql, insert_infec_data)
+    cur.execute(sql, inc_infec_mov_avg_data)
     insert_conn.commit()
     return cur.lastrowid
 
 
-def get_dates_of_dist(tx):
+def match_dates_of_dist(tx):
     result = tx.run(f"""MATCH (a:District) RETURN DISTINCT a.date AS dates""")
-    dates = []
+    m_dates = []
     for ix, record in enumerate(result):
-        dates.append(record.values())
-    return dates
+        m_dates.append(record.values())
+    return m_dates
 
 
-def get_infec(tx, date):
-    nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District)<-[:NEXT_DAY]-(c:District) WHERE (b.cumInfec > 0)
-    RETURN 
-        ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
-        toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) / 
-        (toFloat(b.cumInfec) - toFloat(b.cumCured) - toFloat(b.cumDead)))
-    AS infecPer, (a.cumInfec - b.cumInfec) 
-    AS infecAbs, a.code AS code, 
-    a.name AS name""", date=date)
+def match_inc_infec_abs_per(tx, m_date):
+    nodes = tx.run("""MATCH (a:District {date: $date})<-[:NEXT_DAY]-(b:District) WHERE (b.cumInfec > 0) RETURN
+    (toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
+    toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) AS incInfecAbs,
+    ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
+    toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) / 
+    (toFloat(b.cumInfec) - toFloat(b.cumCured) - toFloat(b.cumDead))) AS incInfecPer,
+    a.code AS code,
+    a.name AS name""", date=m_date)
     return [record for record in nodes.data()]
 
 
-def get_dist_infec(tx, date, period):
-    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{period}]-(b:District) 
-    RETURN (a.cumInfec - b.cumInfec)/{period}.0 AS incInfecAvg, a.code AS code, a.name AS name""", date=date)
+def match_inc_infec_mov_avg(tx, m_date, m_period):
+    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District) RETURN
+    ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
+    toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead))/{m_period}.0) AS incInfecMovAvg,
+    a.code AS code,
+    a.name AS name""", date=m_date)
     return [record for record in nodes.data()]
 
-def get_daily_outbreaks(tx):
-    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{period}]-(b:District) 
-    RETURN (a.incInfec - b.incInfec)/{period}.0 AS incInfecAvg, a.code AS code, a.name AS name""", date=date)
+
+def match_daily_outbreaks(tx, m_date, m_period):
+    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District) RETURN
+    ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
+    toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead))/{m_period}.0 AS incInfecMovAvg,
+    a.code AS code,
+    a.name AS name""", date=m_date)
     return [record for record in nodes.data()]
 
 
@@ -109,24 +116,24 @@ with conn:
 
     with driver.session() as session:
         periods = [3, 7, 14, 28]
-        dates = session.read_transaction(get_dates_of_dist)
+        dates = session.read_transaction(match_dates_of_dist)
         for date_arr in dates:
             date = date_arr[0]
 
-            districts = session.read_transaction(get_infec, date)
+            districts = session.read_transaction(match_inc_infec_abs_per, date)
             for district in districts:
                 name = district['name']
                 code = district['code']
-                infec_abs = district['infecAbs']
-                infec_per = district['infecPer']
-                inc_infec = (code, name, date, infec_abs, infec_per)
-                insert_infec_inc(conn, inc_infec)
+                inc_infec_abs = district['incInfecAbs']
+                inc_infec_per = district['incInfecPer']
+                inc_infec = (code, name, date, inc_infec_abs, inc_infec_per)
+                insert_inc_infec_abs_per(conn, inc_infec)
 
             for period in periods:
-                district_incs = session.read_transaction(get_dist_infec, date, period)
+                district_incs = session.read_transaction(match_inc_infec_mov_avg, date, period)
                 for district_inc in district_incs:
                     name = district_inc['name']
                     code = district_inc['code']
-                    inc_infec_avg = district_inc['incInfecAvg']
-                    dist_infec_data = (code, name, date, period, inc_infec_avg)
-                    insert_infec_ma(conn, dist_infec_data)
+                    inc_infec_mov_avg = district_inc['incInfecMovAvg']
+                    dist_inc_infec = (code, name, date, period, inc_infec_mov_avg)
+                    insert_inc_infec_mov_avg(conn, dist_inc_infec)
