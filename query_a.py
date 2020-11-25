@@ -52,6 +52,8 @@ def select_inc_infec_mov_avg(s_conn, s_period=7, s_from_date='0000-00-00', s_to_
 
 
 def plot_increase_percentage(from_date, to_date, period, district='all'):
+    calculate_data_for_graph(from_date=from_date, to_date=to_date, period=period, district=district)
+
     global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
     assert period == 3 or period == 7 or period == 14 or period == 28
 
@@ -94,7 +96,7 @@ def plot_increase_percentage(from_date, to_date, period, district='all'):
     else:
         plt.title(f"Increase/decrease of infected in {district}")
 
-    plt.savefig(f"images/{district}_{from_date}_{to_date}_{period}.svg", bbox_inches='tight')
+    plt.savefig(f"images/Changes_{district}_{from_date}_{to_date}_{period}.svg", bbox_inches='tight')
     plt.show()
 
 
@@ -124,14 +126,10 @@ with conn:
     global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
     # periods = [3, 7, 14, 28]
 
-    calculate_data_for_graph(from_date='2019-03-01', to_date='2021-04-11', period=14)
     plot_increase_percentage(from_date='2019-03-01', to_date='2021-04-11', period=14)
 
-    calculate_data_for_graph(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Brno-město")
     plot_increase_percentage(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Brno-město")
 
-    calculate_data_for_graph(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Znojmo")
     plot_increase_percentage(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Znojmo")
 
-    calculate_data_for_graph(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Brno-venkov")
     plot_increase_percentage(from_date='2020-04-01', to_date='2020-08-30', period=7, district="Brno-venkov")
