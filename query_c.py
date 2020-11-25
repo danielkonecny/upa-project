@@ -29,10 +29,10 @@ def select_outbreaks(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', s
 
 def get_data_for_graph(from_date='2020-01-01', to_date='2050-01-01', districts=None):
     global dates_out, towns_out
-    outbreakes = select_outbreaks(conn, from_date, to_date, districts)
-    outbreakes = np.swapaxes(np.array(outbreakes), 0, 1)
-    dates_out = outbreakes[0]
-    towns_out = outbreakes[1]
+    outbreaks = select_outbreaks(conn, from_date, to_date, districts)
+    outbreaks = np.swapaxes(np.array(outbreaks), 0, 1)
+    dates_out = outbreaks[0]
+    towns_out = outbreaks[1]
 
 
 def plot_outbreaks(from_date='2020-01-01', to_date='2050-01-01', districts=None):
@@ -75,11 +75,10 @@ def plot_outbreaks(from_date='2020-01-01', to_date='2050-01-01', districts=None)
 
 conn = create_connection(database)
 with conn:
-    from_date = '2019-04-01'
-    to_date = '2021-08-30'
-    districts = ["Brno-město", "Znojmo", "Břeclav"]
+    global dates_out, towns_out
 
-    plot_outbreaks(from_date='2020-09-10', to_date='2021-08-30', districts=["Brno-město", "Znojmo", "Břeclav", "Hodonín",
-                                                                            "Brno-venkov", "Vysočina", "Ústí nad Orlicí"
-                                                                            "Litomyšl", "Liberec", "Pardubice"])
+    plot_outbreaks(from_date='2020-09-10', to_date='2021-08-30',
+                   districts=["Brno-město", "Znojmo", "Břeclav", "Hodonín", "Brno-venkov",
+                              "Vysočina", "Ústí nad Orlicí", "Litomyšl", "Liberec", "Pardubice"])
+
     plot_outbreaks(from_date='2019-04-01', to_date='2021-08-30')
