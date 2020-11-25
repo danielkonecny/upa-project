@@ -15,9 +15,6 @@ def create_connection(db_file=':memory:'):
     return connect_conn
 
 
-conn = create_connection(database)
-
-
 def select_inc_infec_abs(s_conn, s_from_date='0000-00-00', s_to_date='9999-99-99', s_district='all'):
     cur = s_conn.cursor()
     if s_district == 'all':
@@ -122,6 +119,7 @@ def calculate_data_for_graph(from_date, to_date, period, district='all'):
     data_mov_avg, dates_mov_avg = get_formatted_float_data(inc_infec_mov_avg, data_type=float)
 
 
+conn = create_connection(database)
 with conn:
     global dates_abs, data_abs, dates_per, data_per, dates_mov_avg, data_mov_avg
     # periods = [3, 7, 14, 28]
