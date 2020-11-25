@@ -69,7 +69,7 @@ def plot_outbreaks(from_date='2020-01-01', to_date='2050-01-01', districts=None)
 
     ax.legend(["outbreak"], loc='best', fontsize=town_font_size+2)
 
-    plt.savefig(f"images/Outbreaks_{districts}_{from_date}_{to_date}.svg", bbox_inches='tight')
+    plt.savefig(f"images/Outbreaks_{districts}_{from_date}_{to_date}.png", bbox_inches='tight', dpi=600)
     plt.show()
 
 
