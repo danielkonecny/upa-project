@@ -96,7 +96,7 @@ def plot_increase_percentage(from_date, to_date, period, district='all'):
     else:
         plt.title(f"Increase/decrease of infected in {district}")
 
-    plt.savefig(f"images/Changes_{district}_{from_date}_{to_date}_{period}.svg", bbox_inches='tight')
+    plt.savefig(f"images/Changes_{district}_{from_date}_{to_date}_{period}.png", bbox_inches='tight', dpi=600)
     plt.show()
 
 
