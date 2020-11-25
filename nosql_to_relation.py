@@ -48,7 +48,7 @@ def create_database(database_conn):
     distName text NOT NULL,
     date date NOT NULL,
     outbreakInc integer NOT NULL,
-    diffToSecond float NOT NULL);'''
+    diffToSecond integer NOT NULL);'''
 
     create_table(database_conn, inc_infec_abs_per_table)
     create_table(database_conn, inc_infec_mov_avg_table)
@@ -124,8 +124,8 @@ def match_daily_outbreaks(tx, m_date, m_name):
     (a.cumInfec - a.cumCured - a.cumDead)-(b.cumInfec - b.cumCured - b.cumDead) as maxLocal, a as a
     MATCH (e:District)
     WHERE ((maxLocal > maxNeigh) AND a.code = e.code AND a.date = e.date)
-    RETURN e as OutbreakNode, maxLocal as OutbreakInc,
-    ((toFloat(maxLocal)/toFloat(maxNeigh)) - 1) as DiffToSecond""", date=m_date, name=m_name)
+    RETURN e as OutbreakNode, maxLocal as OutbreakInc, (maxLocal - maxNeigh) as DiffToSecond""",
+                   date=m_date, name=m_name)
     return [record for record in nodes.data()]
 
 
@@ -141,6 +141,7 @@ with conn:
         dates = session.read_transaction(match_dates_of_dist)
         for date_arr in dates:
             date = date_arr[0]
+            print(f"Generating data for date {date}...")
 
             names = session.read_transaction(match_names_of_dist)
             for name_arr in names:
