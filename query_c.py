@@ -63,9 +63,9 @@ def plot_outbreaks(from_date='2020-01-01', to_date='2050-01-01', districts=None)
 
     fig.tight_layout()
     if districts is None:
-        plt.title("When towns were outbreaks in Czechia", fontsize=heading_size)
+        plt.title("Outbreaks in all districts of Czechia through time", fontsize=heading_size)
     else:
-        plt.title(f"When towns were outbreaks in selected towns", fontsize=heading_size)
+        plt.title("Outbreaks in specific districts of Czechia through time", fontsize=heading_size)
 
     ax.legend(["outbreak"], loc='best', fontsize=town_font_size+2)
 

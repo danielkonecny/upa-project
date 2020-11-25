@@ -86,9 +86,9 @@ def plot_increase_percentage(from_date, to_date, period, district='all'):
     ax1.set_ylabel("Change in the number of infected ")
     ax2.set_ylabel("Percentage change of infected")
     ax1.set_xlabel("Date")
-    ax1.legend([change_line, average_line],
-               [f"{period}-day step moving average", 'change of infected'], loc='upper left')
-    ax2.legend([percentage_line], ['percentage infected change'], loc='upper right')
+    ax1.legend([average_line, change_line],
+               [f"{period}-day step moving average", 'infected increase'], loc='upper left')
+    ax2.legend([percentage_line], ['infected increase percentage'], loc='upper right')
 
     fig.tight_layout()
     if district == 'all':
