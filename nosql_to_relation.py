@@ -46,7 +46,9 @@ def create_database(database_conn):
     id integer PRIMARY KEY,
     distCode text NOT NULL,
     distName text NOT NULL,
-    date date NOT NULL);'''
+    date date NOT NULL,
+    outbreakInc integer NOT NULL,
+    diffToSecond integer NOT NULL);'''
 
     create_table(database_conn, inc_infec_abs_per_table)
     create_table(database_conn, inc_infec_mov_avg_table)
@@ -69,12 +71,28 @@ def insert_inc_infec_mov_avg(insert_conn, inc_infec_mov_avg_data):
     return cur.lastrowid
 
 
+def insert_daily_outbreak(insert_conn, i_outbreak_data):
+    sql = 'INSERT INTO dailyOutbreaks(distCode, distName, date, outbreakInc, diffToSecond) VALUES(?, ?, ?, ?, ?)'
+    cur = conn.cursor()
+    cur.execute(sql, i_outbreak_data)
+    insert_conn.commit()
+    return cur.lastrowid
+
+
 def match_dates_of_dist(tx):
     result = tx.run(f"""MATCH (a:District) RETURN DISTINCT a.date AS dates""")
     m_dates = []
     for ix, record in enumerate(result):
         m_dates.append(record.values())
     return m_dates
+
+
+def match_names_of_dist(tx):
+    result = tx.run(f"""MATCH (a:District) RETURN DISTINCT a.name AS names""")
+    m_names = []
+    for ix, record in enumerate(result):
+        m_names.append(record.values())
+    return m_names
 
 
 def match_inc_infec_abs_per(tx, m_date):
@@ -98,12 +116,16 @@ def match_inc_infec_mov_avg(tx, m_date, m_period):
     return [record for record in nodes.data()]
 
 
-def match_daily_outbreaks(tx, m_date, m_period):
-    nodes = tx.run(f"""MATCH (a:District {{date: $date}})<-[:NEXT_DAY*{m_period}]-(b:District) RETURN
-    ((toFloat(a.cumInfec) - toFloat(a.cumCured) - toFloat(a.cumDead) - 
-    toFloat(b.cumInfec) + toFloat(b.cumCured) + toFloat(b.cumDead)) / {m_period}.0 AS incInfecMovAvg,
-    a.code AS code,
-    a.name AS name""", date=m_date)
+def match_daily_outbreaks(tx, m_date, m_name):
+    nodes = tx.run(f"""MATCH (a:District {{date: $date, name: $name}})<-[:NEXT_DAY]-(b:District) 
+    MATCH (a)-[:IS_NEIGHBOR]-(c) 
+    MATCH (c:District)<-[:NEXT_DAY]-(d:District)
+    WITH max((c.cumInfec - c.cumCured - c.cumDead)-(d.cumInfec - d.cumCured - d.cumDead)) as maxNeigh,
+    (a.cumInfec - a.cumCured - a.cumDead)-(b.cumInfec - b.cumCured - b.cumDead) as maxLocal, a as a
+    MATCH (e:District)
+    WHERE ((maxLocal > maxNeigh) AND a.code = e.code AND a.date = e.date)
+    RETURN e as OutbreakNode, maxLocal as OutbreakInc, (maxLocal - maxNeigh) as DiffToSecond""",
+                   date=m_date, name=m_name)
     return [record for record in nodes.data()]
 
 
@@ -119,6 +141,17 @@ with conn:
         dates = session.read_transaction(match_dates_of_dist)
         for date_arr in dates:
             date = date_arr[0]
+            print(f"Generating data for date {date}...")
+
+            names = session.read_transaction(match_names_of_dist)
+            for name_arr in names:
+                name = name_arr[0]
+                outbreak = session.read_transaction(match_daily_outbreaks, date, name)
+                if outbreak:
+                    outbreak_data = (outbreak[0]['OutbreakNode']['code'], outbreak[0]['OutbreakNode']['name'],
+                                     outbreak[0]['OutbreakNode']['date'], outbreak[0]['OutbreakInc'],
+                                     outbreak[0]['DiffToSecond'])
+                    insert_daily_outbreak(conn, outbreak_data)
 
             districts = session.read_transaction(match_inc_infec_abs_per, date)
             for district in districts:
